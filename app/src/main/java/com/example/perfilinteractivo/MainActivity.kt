@@ -1,7 +1,10 @@
-
 package com.example.perfilinteractivo
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Path
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -24,8 +27,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.graphics.drawable.toDrawable
 import kotlinx.coroutines.launch
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
@@ -44,7 +46,6 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
 private val Morado = Color(0xFF6938D3)
-private val Azul = Color(0xFF3159DF)
 private val Fondo = Color(0xFFF7F7FD)
 private val Oscuro = Color(0xFF172033)
 private val Gris = Color(0xFF68738A)
@@ -79,7 +80,7 @@ class MainActivity : ComponentActivity() {
         )
 
         Configuration.getInstance().userAgentValue =
-            "PerfilInteractivo/2.1"
+            "PerfilInteractivo/3.1"
 
         setContent {
             MaterialTheme(
@@ -97,6 +98,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun PantallaPerfil() {
+
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -110,7 +112,7 @@ fun PantallaPerfil() {
                 onClick = {
                     scope.launch {
                         snackbar.showSnackbar(
-                            message = "¡Esta es mi práctica de Android! Si saco 10, Ya Paseme Profe \uD83E\uDD7A ",
+                            message = "Profe ya paseme  \uD83E\uDD7A  \uD83E\uDD7A ",
                             withDismissAction = true,
                             duration = SnackbarDuration.Long
                         )
@@ -119,14 +121,12 @@ fun PantallaPerfil() {
                 containerColor = Morado,
                 contentColor = Color.White,
                 shape = CircleShape,
-                modifier = Modifier
-                    .size(62.dp)
-                    .shadow(10.dp, CircleShape)
+                modifier = Modifier.size(56.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Mostrar mensaje",
-                    modifier = Modifier.size(31.dp)
+                    modifier = Modifier.size(28.dp)
                 )
             }
         }
@@ -148,26 +148,15 @@ fun PantallaPerfil() {
                     .padding(horizontal = 20.dp)
             ) {
 
-                Spacer(Modifier.height(18.dp))
+                Spacer(Modifier.height(16.dp))
 
                 InformacionPerfil()
 
                 Spacer(Modifier.height(26.dp))
 
                 EncabezadoSeccion(
-                    titulo = "ACERCA DE MÍ",
-                    subtitulo = "Mi formación, intereses y trayectoria"
-                )
-
-                Spacer(Modifier.height(12.dp))
-
-                TarjetaDescripcion()
-
-                Spacer(Modifier.height(27.dp))
-
-                EncabezadoSeccion(
                     titulo = "LENGUAJES DE PROGRAMACIÓN",
-                    subtitulo = "10 tecnologías y herramientas · Desliza →"
+                    subtitulo = "Explora mis habilidades y tecnologías"
                 )
             }
 
@@ -175,7 +164,7 @@ fun PantallaPerfil() {
 
             SeccionTecnologias()
 
-            Spacer(Modifier.height(26.dp))
+            Spacer(Modifier.height(27.dp))
 
             Column(
                 modifier = Modifier.padding(horizontal = 20.dp)
@@ -183,18 +172,18 @@ fun PantallaPerfil() {
 
                 EncabezadoSeccion(
                     titulo = "UBICACIÓN",
-                    subtitulo = "Explora el mapa interactivo"
+                    subtitulo = "Mapa interactivo con OpenStreetMap"
                 )
 
                 Spacer(Modifier.height(13.dp))
 
                 MapaInteractivo()
 
-                Spacer(Modifier.height(23.dp))
+                Spacer(Modifier.height(24.dp))
 
                 TarjetaRepositorio()
 
-                Spacer(Modifier.height(110.dp))
+                Spacer(Modifier.height(120.dp))
             }
         }
     }
@@ -206,6 +195,7 @@ fun LogoOpcional(
     inicial: String,
     modifier: Modifier = Modifier
 ) {
+
     val context = LocalContext.current
 
     val recurso = remember(context, nombre) {
@@ -246,37 +236,25 @@ fun CabeceraPerfil() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(280.dp)
+            .height(240.dp)
     ) {
 
         Image(
             painter = painterResource(R.drawable.portada),
-            contentDescription = "Portada",
+            contentDescription = "Universidad Politécnica de Pachuca",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            Color.Black.copy(alpha = 0.08f),
-                            Color(0xFF111B43).copy(alpha = 0.85f)
-                        )
-                    )
-                )
         )
 
         Surface(
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(start = 18.dp, top = 18.dp),
-            color = Color.White.copy(alpha = 0.92f),
+                .padding(start = 16.dp, top = 16.dp),
+            color = Color.White.copy(alpha = 0.94f),
             shape = RoundedCornerShape(22.dp),
             shadowElevation = 5.dp
         ) {
+
             Row(
                 modifier = Modifier.padding(
                     horizontal = 12.dp,
@@ -284,6 +262,7 @@ fun CabeceraPerfil() {
                 ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 LogoOpcional(
                     nombre = "logo_upp",
                     inicial = "UPP",
@@ -293,6 +272,7 @@ fun CabeceraPerfil() {
                 Spacer(Modifier.width(9.dp))
 
                 Column {
+
                     Text(
                         text = "Universidad Politécnica",
                         fontSize = 12.sp,
@@ -309,40 +289,13 @@ fun CabeceraPerfil() {
             }
         }
 
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 18.dp, bottom = 40.dp),
-            horizontalAlignment = Alignment.End
-        ) {
-            Text(
-                text = "DIGITAL PORTFOLIO",
-                color = Color(0xFFCBD5FF),
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.5.sp
-            )
-
-            Spacer(Modifier.height(5.dp))
-
-            Text(
-                text = "Innovación\nsin límites.",
-                color = Color.White,
-                fontSize = 24.sp,
-                lineHeight = 28.sp,
-                fontWeight = FontWeight.ExtraBold,
-                textAlign = TextAlign.End
-            )
-        }
-
         Image(
             painter = painterResource(R.drawable.img2),
-            contentDescription = "Foto de perfil",
+            contentDescription = "Fotografía de David",
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(start = 19.dp)
-                .size(122.dp)
-                .shadow(9.dp, CircleShape)
+                .padding(start = 20.dp)
+                .size(110.dp)
                 .background(Color.White, CircleShape)
                 .padding(5.dp)
                 .clip(CircleShape),
@@ -354,7 +307,9 @@ fun CabeceraPerfil() {
 @Composable
 fun InformacionPerfil() {
 
-    Column {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
 
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -362,16 +317,18 @@ fun InformacionPerfil() {
 
             Text(
                 text = "David de Jesús\nHernández Hernández",
-                fontSize = 25.sp,
-                lineHeight = 30.sp,
+                fontSize = 24.sp,
+                lineHeight = 28.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = Oscuro,
                 modifier = Modifier.weight(1f)
             )
 
+            Spacer(Modifier.width(8.dp))
+
             Surface(
-                shape = CircleShape,
-                color = Morado
+                color = Morado,
+                shape = CircleShape
             ) {
                 Text(
                     text = "✓",
@@ -386,40 +343,41 @@ fun InformacionPerfil() {
             }
         }
 
-        Spacer(Modifier.height(9.dp))
+        Spacer(Modifier.height(8.dp))
 
         Text(
             text = "Ingeniería en Tecnologías de la Información e Innovación Digital",
-            color = Morado,
-            fontSize = 14.sp,
-            lineHeight = 21.sp,
-            fontWeight = FontWeight.Bold
+            fontSize = 13.sp,
+            lineHeight = 19.sp,
+            fontWeight = FontWeight.Bold,
+            color = Morado
         )
 
-        Spacer(Modifier.height(9.dp))
-
-        Text(
-            text = "Estudiante UPP  |  Desarrollo Android y Web",
-            color = Gris,
-            fontSize = 12.sp
-        )
-
-        Spacer(Modifier.height(13.dp))
+        Spacer(Modifier.height(10.dp))
 
         Surface(
             color = Color(0xFFEDE8FC),
-            shape = RoundedCornerShape(30.dp)
+            shape = RoundedCornerShape(24.dp)
         ) {
             Text(
                 text = "✉  daviddejesushh@gmail.com",
                 color = Morado,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(
-                    horizontal = 14.dp,
-                    vertical = 10.dp
+                    horizontal = 13.dp,
+                    vertical = 9.dp
                 )
             )
         }
+
+        Spacer(Modifier.height(12.dp))
+
+        Text(
+            text = "Estudiante de la Universidad Politécnica de Pachuca, apasionado por el desarrollo de aplicaciones móviles, tecnologías web y bases de datos.",
+            fontSize = 13.sp,
+            lineHeight = 20.sp,
+            color = Gris
+        )
     }
 }
 
@@ -428,13 +386,14 @@ fun EncabezadoSeccion(
     titulo: String,
     subtitulo: String
 ) {
+
     Column {
+
         Text(
             text = titulo,
             fontSize = 17.sp,
             fontWeight = FontWeight.ExtraBold,
-            color = Oscuro,
-            letterSpacing = 0.4.sp
+            color = Oscuro
         )
 
         Spacer(Modifier.height(5.dp))
@@ -448,47 +407,29 @@ fun EncabezadoSeccion(
 }
 
 @Composable
-fun TarjetaDescripcion() {
-
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
-        color = Color.White,
-        shadowElevation = 4.dp,
-        border = BorderStroke(
-            1.dp,
-            Color(0xFFEAEAF3)
-        )
-    ) {
-
-        Column(
-            modifier = Modifier.padding(20.dp)
-        ) {
-
-            Text(
-                text = "✦  Mi perfil profesional",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
-                color = Morado
-            )
-
-            Spacer(Modifier.height(12.dp))
-
-            Text(
-                text = "Soy estudiante de Ingeniería en Tecnologías de la Información e Innovación Digital en la Universidad Politécnica de Pachuca. Me apasiona el desarrollo de aplicaciones móviles con Kotlin y Jetpack Compose, así como la creación de sistemas web y el trabajo con bases de datos. También utilizo Linux, Docker, Git y GitHub para desarrollar y administrar proyectos tecnológicos.",
-                fontSize = 13.sp,
-                lineHeight = 21.sp,
-                color = Color(0xFF48546B)
-            )
-        }
-    }
-}
-
-@Composable
 fun SeccionTecnologias() {
 
     val context = LocalContext.current
     val scroll = rememberScrollState()
+
+    val anchoTarjeta = 175.dp
+    val separacion = 10.dp
+
+    val densidad = androidx.compose.ui.platform.LocalDensity.current
+
+    val pasoPx = with(densidad) {
+        (anchoTarjeta + separacion).toPx()
+    }
+
+    val primeraColumna = if (pasoPx > 0f) {
+        (scroll.value / pasoPx).toInt()
+            .coerceIn(0, 4)
+    } else {
+        0
+    }
+
+    val inicio = primeraColumna * 2 + 1
+    val fin = (inicio + 3).coerceAtMost(10)
 
     Column {
 
@@ -500,7 +441,9 @@ fun SeccionTecnologias() {
                     horizontal = 20.dp,
                     vertical = 6.dp
                 ),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.spacedBy(
+                separacion
+            )
         ) {
 
             tecnologias.chunked(2).forEach { columna ->
@@ -520,8 +463,8 @@ fun SeccionTecnologias() {
                                 ).show()
                             },
                             modifier = Modifier
-                                .width(175.dp)
-                                .height(70.dp),
+                                .width(anchoTarjeta)
+                                .height(68.dp),
                             shape = RoundedCornerShape(18.dp),
                             color = Color.White,
                             shadowElevation = 3.dp,
@@ -539,7 +482,7 @@ fun SeccionTecnologias() {
                                 LogoOpcional(
                                     nombre = tecnologia.imagen,
                                     inicial = tecnologia.inicial,
-                                    modifier = Modifier.size(39.dp)
+                                    modifier = Modifier.size(38.dp)
                                 )
 
                                 Spacer(Modifier.width(9.dp))
@@ -560,13 +503,81 @@ fun SeccionTecnologias() {
 
         Spacer(Modifier.height(10.dp))
 
-        Text(
-            text = "10 tecnologías disponibles  •  Desliza horizontalmente",
-            fontSize = 11.sp,
-            color = Morado,
-            modifier = Modifier.padding(horizontal = 20.dp)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Text(
+                text = "Mostrando $inicio–$fin de 10",
+                fontSize = 11.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Morado
+            )
+
+            Text(
+                text = "Desliza →",
+                fontSize = 11.sp,
+                color = Gris
+            )
+        }
     }
+}
+
+private fun crearMarcadorMorado(): android.graphics.drawable.Drawable {
+
+    val ancho = 100
+    val alto = 135
+
+    val bitmap = Bitmap.createBitmap(
+        ancho,
+        alto,
+        Bitmap.Config.ARGB_8888
+    )
+
+    val canvas = Canvas(bitmap)
+
+    val pintura = Paint(
+        Paint.ANTI_ALIAS_FLAG
+    )
+
+    val forma = Path().apply {
+        moveTo(50f, 128f)
+        cubicTo(32f, 98f, 10f, 72f, 10f, 47f)
+        cubicTo(10f, 20f, 28f, 7f, 50f, 7f)
+        cubicTo(72f, 7f, 90f, 20f, 90f, 47f)
+        cubicTo(90f, 72f, 68f, 98f, 50f, 128f)
+        close()
+    }
+
+    pintura.color = android.graphics.Color.WHITE
+    pintura.style = Paint.Style.STROKE
+    pintura.strokeWidth = 8f
+
+    canvas.drawPath(forma, pintura)
+
+    pintura.style = Paint.Style.FILL
+    pintura.color = android.graphics.Color.rgb(
+        105, 56, 211
+    )
+
+    canvas.drawPath(forma, pintura)
+
+    pintura.color = android.graphics.Color.WHITE
+
+    canvas.drawCircle(
+        50f,
+        46f,
+        17f,
+        pintura
+    )
+
+    return bitmap.toDrawable(
+        android.content.res.Resources.getSystem()
+    )
 }
 
 @Composable
@@ -591,12 +602,14 @@ fun MapaInteractivo() {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(260.dp),
+                .height(250.dp),
             color = Color(0xFFEDE8FC),
-            shape = RoundedCornerShape(22.dp)
+            shape = RoundedCornerShape(20.dp)
         ) {
 
-            Box(contentAlignment = Alignment.Center) {
+            Box(
+                contentAlignment = Alignment.Center
+            ) {
                 Text(
                     text = "Configura tu clave de MapTiler en res/values/maptiler_keys.xml",
                     color = Morado,
@@ -649,6 +662,8 @@ fun MapaInteractivo() {
             marcador.title = "Ubicación de ejemplo"
             marcador.snippet = "PerfilInteractivo"
 
+            marcador.icon = crearMarcadorMorado()
+
             marcador.setAnchor(
                 Marker.ANCHOR_CENTER,
                 Marker.ANCHOR_BOTTOM
@@ -670,7 +685,7 @@ fun MapaInteractivo() {
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(20.dp),
         color = Color.White,
         shadowElevation = 4.dp
     ) {
@@ -681,7 +696,7 @@ fun MapaInteractivo() {
                 factory = { mapa },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp)
+                    .height(280.dp)
             )
 
             Row(
@@ -749,6 +764,7 @@ fun TarjetaRepositorio() {
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
+
                 val intent = Intent(
                     Intent.ACTION_VIEW,
                     Uri.parse(
@@ -758,33 +774,35 @@ fun TarjetaRepositorio() {
 
                 context.startActivity(intent)
             },
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(20.dp),
         color = Oscuro
     ) {
 
         Row(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(19.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Box(
                 modifier = Modifier
-                    .size(50.dp)
-                    .clip(RoundedCornerShape(15.dp))
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(14.dp))
                     .background(Morado),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "</>",
                     color = Color.White,
-                    fontSize = 15.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
 
-            Spacer(Modifier.width(14.dp))
+            Spacer(Modifier.width(13.dp))
 
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
 
                 Text(
                     text = "MI REPOSITORIO",
